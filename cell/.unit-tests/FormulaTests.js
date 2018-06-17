@@ -7682,6 +7682,7 @@ $( function () {
         ok( oParser.parse() );
         strictEqual( oParser.calculate().getValue(), ISPMT(0.1,1,3,8000000) );
 
+        testArrayFormula2("ISPMT", 4, 4);
     } );
 
 	test( "Test: \"ISFORMULA\"", function () {
@@ -8359,6 +8360,7 @@ $( function () {
         ok( oParser.parse() );
         strictEqual( oParser.calculate().getValue(), coupdaybs( new cDate(2007,0,25), new cDate(2008,10,15), 2 ) );
 
+        testArrayFormula2("COUPDAYBS", 3, 4, true);
     } );
 
     test( "Test: \"COUPDAYS\"", function () {
@@ -8379,6 +8381,7 @@ $( function () {
         ok( oParser.parse() );
         strictEqual( oParser.calculate().getValue(), coupdays( new cDate(2007,0,25), new cDate(2008,10,15), 2 ) );
 
+		testArrayFormula2("COUPDAYS", 3, 4, true);
     } );
 
     test( "Test: \"COUPDAYSNC\"", function () {
@@ -8405,6 +8408,7 @@ $( function () {
         ok( oParser.parse() );
         strictEqual( oParser.calculate().getValue(), coupdaysnc( new cDate(2007,0,25), new cDate(2008,10,15), 2 ) );
 
+		testArrayFormula2("COUPDAYSNC", 3, 4, true);
     } );
 
     test( "Test: \"COUPNCD\"", function () {
@@ -8423,6 +8427,7 @@ $( function () {
         ok( oParser.parse() );
         strictEqual( oParser.calculate().getValue(), coupncd( new cDate(Date.UTC(2007,0,25)), new cDate(Date.UTC(2008,10,15)), 2, 1 ) );
 
+		testArrayFormula2("COUPNCD", 3, 4, true);
     } );
 
     test( "Test: \"COUPNUM\"", function () {
@@ -8431,6 +8436,7 @@ $( function () {
         ok( oParser.parse() );
         strictEqual( oParser.calculate().getValue(), _coupnum( new cDate(2007,0,25), new cDate(2008,10,15), 2, 1 ) );
 
+		testArrayFormula2("COUPNUM", 3, 4, true);
     } );
 
     test( "Test: \"COUPPCD\"", function () {
@@ -8759,6 +8765,7 @@ $( function () {
         ok( oParser.parse() );
         strictEqual( oParser.calculate().getValue(), syd( 30000,7500,-10,10 ) );
 
+        testArrayFormula2("SYD", 4, 4);
     } );
 
     test( "Test: \"PPMT\"", function () {
