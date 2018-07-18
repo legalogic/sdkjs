@@ -5,6 +5,9 @@ This document describes the steps needed to build SDK.
 	- Download and install Java (http://java.com/en/download/index.jsp).
 	
 2. SDK build:
-	- npm install -g grunt-cli
-	- npm install
-	- grunt
+
+- npm install -g grunt-cli
+- npm install grunt --save-dev
+- npm install grunt-contrib-jshint --save-dev
+- npm install --save-dev connect-livereload
+- npm install
