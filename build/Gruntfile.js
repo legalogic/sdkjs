@@ -191,7 +191,8 @@ module.exports = function(grunt) {
 					  prefix: [ "sdk-all-min", "sdk-all" ]
 					},
 					dest: sdkDstFolder,
-					src: tmp_sdk_path
+					//src: tmp_sdk_path
+					src: sdkTmp
 				}
 			},
 			concat: {

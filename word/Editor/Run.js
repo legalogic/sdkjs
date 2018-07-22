@@ -1166,6 +1166,16 @@ ParaRun.prototype.GetLogicDocument = function()
 // Добавляем элемент в позицию с сохранием в историю
 ParaRun.prototype.Add_ToContent = function(Pos, Item, UpdatePosition)
 {
+    console.log("Contentttttttttttttttttttttttt")
+    
+    console.log(this.Content)
+    console.log("Contentttttttttttttttttttttttt json")
+    console.log(JSON.stringify(this.Content))
+    
+    console.log("itemmmmmmmmmmmmmmm")
+    console.log(Item)
+    console.log(JSON.stringify(Item))
+
 	if (-1 === Pos)
 		Pos = this.Content.length;
 
