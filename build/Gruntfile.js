@@ -177,13 +177,13 @@ module.exports = function(grunt) {
 		}
 		
 		grunt.initConfig({
-			'closure-compiler': {
-				sdk: {
-					options: sdkOpt,
-					dest: tmp_sdk_path,
-					src: [sdkTmp]
-				}
-			},
+			// 'closure-compiler': {
+			// 	sdk: {
+			// 		options: sdkOpt,
+			// 		dest: tmp_sdk_path,
+			// 		src: [sdkTmp]
+			// 	}
+			// },
 			splitfile: {
 				sdk: {
 					options: {
@@ -238,6 +238,7 @@ module.exports = function(grunt) {
 	});
 	
 	grunt.registerTask('concat_sdk', ['concat_sdk_init', 'concat', 'clean']);
-	grunt.registerTask('build_sdk', ['concat_sdk', 'compile_sdk_init', 'closure-compiler', 'splitfile', 'concat', 'replace', 'clean']);
+	//grunt.registerTask('build_sdk', ['concat_sdk', 'compile_sdk_init', 'closure-compiler', 'splitfile', 'concat', 'replace', 'clean']);
+	grunt.registerTask('build_sdk', ['concat_sdk', 'compile_sdk_init','splitfile', 'concat', 'replace', 'clean']);
 	grunt.registerTask('default', ['build_word']);
 };
