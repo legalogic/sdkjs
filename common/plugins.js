@@ -712,11 +712,20 @@
 
 	function onMessage(event)
 	{
+
+		console.log("ppppppppppppppppppppppp")
+		console.log(event.data)
+		
+		
+
 		if (!window.g_asc_plugins)
 			return;
 
 		if (typeof(event.data) != "string")
 			return;
+
+
+
 
 		var pluginData = new CPluginData();
 		pluginData.deserialize(event.data);
@@ -766,12 +775,22 @@
 
 			if (value && value != "")
 			{
+
+				//Arik - value is the code we ran in callCommand
+				// console.log('vvvvvvvvvvvvvvvvvvvv')
+				// console.log(value)
+
 				var _command_callback_send = ("command" == name);
 				try
 				{
 					if (pluginData.getAttribute("interface"))
 					{
 						var _script = "(function(){ var Api = window.g_asc_plugins.api;\n" + value + "\n})();";
+
+						//Arik - doesnt get here
+						// console.log('scriptttttttttttttttttt')
+						// console.log(_script)
+
 						eval(_script);
 					}
 					else if (pluginData.getAttribute("resize") || window.g_asc_plugins.api.asc_canPaste())
@@ -790,8 +809,14 @@
 
                         AscFonts.IsCheckSymbols = true;
 						var _script = "(function(){ var Api = window.g_asc_plugins.api;\n" + value + "\n})();";
+
+						//Arik - the code evals here!!!!!!!
+						console.log('scriptttttttttt22222')
+						console.log(_script)
+						
+						
 						eval(_script);
-                        AscFonts.IsCheckSymbols = false;
+						AscFonts.IsCheckSymbols = false;
 
 						if (pluginData.getAttribute("recalculate") == true)
 						{
@@ -919,8 +944,9 @@
 
 			window.g_asc_plugins.guidAsyncMethod = guid;
 
-			if (window.g_asc_plugins.api[_apiMethodName])
+			if (window.g_asc_plugins.api[_apiMethodName]){
 				_return = window.g_asc_plugins.api[_apiMethodName].apply(window.g_asc_plugins.api, value);
+			}
 
 			if (!runObject.methodReturnAsync)
 			{
