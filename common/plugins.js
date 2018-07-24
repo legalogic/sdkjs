@@ -809,11 +809,6 @@
 						var _script = "(function(){ var Api = window.g_asc_plugins.api;\n" + value + "\n})();";
 
 						//Arik - the code evals here!!!!!!!
-						console.log('scriptttttttttt22222')
-						console.log(_script)
-
-
-						
 						eval(_script);
 						AscFonts.IsCheckSymbols = false;
 
