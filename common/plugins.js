@@ -713,9 +713,7 @@
 	function onMessage(event)
 	{
 
-		console.log("ppppppppppppppppppppppp")
-		console.log(event.data)
-		
+
 		
 
 		if (!window.g_asc_plugins)
@@ -813,7 +811,8 @@
 						//Arik - the code evals here!!!!!!!
 						console.log('scriptttttttttt22222')
 						console.log(_script)
-						
+
+
 						
 						eval(_script);
 						AscFonts.IsCheckSymbols = false;
