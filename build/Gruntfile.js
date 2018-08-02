@@ -55,9 +55,8 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('concat_sdk_init', function () {
 		var sdkDstFolder = packageFile['compile']['sdk']['dst'];
-		var sdkTmp = sdkDstFolder + '/sdk-tmp.js';
-		var sdkAllTmp = sdkDstFolder + '/sdk-all-tmp.js';
-		var sdkAllMinTmp = sdkDstFolder + '/sdk-all-min-tmp.js';
+		var sdkAllDestFile = sdkDstFolder + '/sdk-all.js';
+		var sdkAllMinDestFile = sdkDstFolder + '/sdk-all-min.js';
 		var srcFilesMin = packageFile['compile']['sdk']['min'];
 		var srcFilesAll = packageFile['compile']['sdk']['common'];
 		var sdkOpt = {};
@@ -81,115 +80,18 @@ module.exports = function (grunt) {
 						footer: 'window["split"]="split";'
 					},
 					src: srcFilesMin,
-					dest: sdkAllMinTmp
+					dest: sdkAllMinDestFile
 				},
 				sdk: {
 					options: sdkOpt,
 					src: srcFilesAll,
-					dest: sdkAllTmp
-				},
-				all: {
-					src: [sdkAllMinTmp, sdkAllTmp],
-					dest: sdkTmp
-				}
-			},
-			clean: {
-				tmp: {
-					options: {
-						force: true
-					},
-					src: [
-						sdkAllMinTmp,
-						sdkAllTmp
-					]
+					dest: sdkAllDestFile
 				}
 			}
 		});
 	});
 
-	grunt.registerTask('compile_sdk_init', function () {
-		var splitLine = '';
-		var sdkDstFolder = packageFile['compile']['sdk']['dst'];
-		var sdkTmp = sdkDstFolder + '/sdk-tmp.js';
-		var tmp_sdk_path = sdkDstFolder + '/sdk-js-tmp.js';
-		var sdkAllMinDst = sdkDstFolder + '/sdk-all-min.js';
-		var sdkAllDst = sdkDstFolder + '/sdk-all.js';
-		var sdkAllCache = sdkDstFolder + '/*.cache'
-		var sdkOpt = {
-			jscomp_off: 'checkVars',
-			compilation_level: level,
-			warning_level: 'QUIET',
-			externs: packageFile['compile']['sdk']['externs']
-		};
-		if (formatting) {
-			sdkOpt['formatting'] = formatting;
-		}
-		if ('ADVANCED' === level) {
-			splitLine = ('PRETTY_PRINT' === formatting) ? 'window.split = "split";' : 'window.split="split";';
-		} else {
-			splitLine = ('PRETTY_PRINT' === formatting) ? 'window["split"] = "split";' : 'window["split"]="split";';
-		}
-
-		grunt.initConfig({
-			splitfile: {
-				sdk: {
-					options: {
-						separator: splitLine,
-						prefix: ["sdk-all-min", "sdk-all"]
-					},
-					dest: sdkDstFolder,
-					//src: tmp_sdk_path
-					src: sdkTmp
-				}
-			},
-			concat: {
-				sdkmin: {
-					src: ['license.js', sdkAllMinDst],
-					dest: sdkAllMinDst
-				},
-				sdk: {
-					src: ['license.js', sdkAllDst],
-					dest: sdkAllDst
-				}
-			},
-			clean: {
-				tmp: {
-					options: {
-						force: true
-					},
-					src: [
-						sdkTmp,
-						// tmp_sdk_path,
-						sdkAllCache
-					]
-				}
-			},
-			replace: {
-				version: {
-					options: {
-						patterns: [
-							{
-								json: {
-									Version: process.env['PRODUCT_VERSION'] || '0.0.0',
-									Build: process.env['BUILD_NUMBER'] || '0'
-								}
-							}
-						]
-					},
-					files: [
-						{ src: [sdkAllMinDst, sdkAllDst], dest: sdkDstFolder + '/' }
-					]
-				}
-			}
-		});
-	});
-
-	//grunt.registerTask('concat_sdk', ['concat_sdk_init', 'concat', 'clean']);
 	grunt.registerTask('concat_sdk', ['concat_sdk_init', 'concat']);
-
-	//orig
-	//grunt.registerTask('build_sdk', ['concat_sdk', 'compile_sdk_init', 'closure-compiler', 'splitfile', 'concat', 'replace', 'clean']);
-
-	grunt.registerTask('build_sdk', ['concat_sdk', 'compile_sdk_init', 'splitfile', 'concat', 'replace', 'clean']);
+	grunt.registerTask('build_sdk', ['concat_sdk']);
 	grunt.registerTask('default', ['build_word']);
 };
