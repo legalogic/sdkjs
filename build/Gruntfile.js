@@ -77,8 +77,6 @@ module.exports = function (grunt) {
 			concat: {
 				sdkmin: {
 					options: {
-						//						banner: '(function(window, undefined) {',
-						//						footer: '})(window);window["split"]="split";'
 						banner: '',
 						footer: 'window["split"]="split";'
 					},
@@ -133,13 +131,6 @@ module.exports = function (grunt) {
 		}
 
 		grunt.initConfig({
-			// 'closure-compiler': {
-			// 	sdk: {
-			// 		options: sdkOpt,
-			// 		dest: tmp_sdk_path,
-			// 		src: [sdkTmp]
-			// 	}
-			// },
 			splitfile: {
 				sdk: {
 					options: {
