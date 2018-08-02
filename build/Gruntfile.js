@@ -30,11 +30,16 @@
  *
  */
 
+
+/*
+	This is LawGeex version of the Grunt file.
+	It builds only word sdk without uglyfing the code
+	The original grunt file is saved under Gruntfile.js.orig
+*/
+
 module.exports = function (grunt) {
 	var defaultConfig, packageFile;
 	var path = grunt.option('src') || './configs';
-	var level = grunt.option('level') || 'ADVANCED';
-	var formatting = grunt.option('formatting') || '';
 
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-concat');
