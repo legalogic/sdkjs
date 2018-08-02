@@ -30,56 +30,30 @@
  *
  */
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 	var defaultConfig, packageFile;
 	var path = grunt.option('src') || './configs';
 	var level = grunt.option('level') || 'ADVANCED';
 	var formatting = grunt.option('formatting') || '';
 
-	require('google-closure-compiler').grunt(grunt, ['ADVANCED' === level ? '-Xms2048m' : '-Xms1024m']);
-
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-replace');
 	grunt.loadNpmTasks('grunt-split-file');
-	
-	grunt.registerTask('build_webword_init', 'Initialize build WebWord SDK.', function(){
-        defaultConfig = path + '/webword.json';
-        packageFile = require(defaultConfig);
 
-        if (packageFile)
-            grunt.log.ok('WebWord config loaded successfully'.green);
-        else
-            grunt.log.error().writeln('Could not load config file'.red);
-    });
-	
-    grunt.registerTask('build_webexcel_init', 'Initialize build WebExcel SDK.', function(){
-        defaultConfig = path + '/webexcel.json';
-        packageFile = require(defaultConfig);
+	grunt.registerTask('build_webword_init', 'Initialize build WebWord SDK.', function () {
+		defaultConfig = path + '/webword.json';
+		packageFile = require(defaultConfig);
 
-        if (packageFile)
-            grunt.log.ok('WebExcel config loaded successfully'.green);
-        else
-            grunt.log.error().writeln('Could not load config file'.red);
-    });
+		if (packageFile)
+			grunt.log.ok('WebWord config loaded successfully'.green);
+		else
+			grunt.log.error().writeln('Could not load config file'.red);
+	});
 
-    grunt.registerTask('build_webpowerpoint_init', 'Initialize build WebPowerPoint SDK.', function(){
-        defaultConfig = path + '/webpowerpoint.json';
-        packageFile = require(defaultConfig);
+	grunt.registerTask('build_word', ['build_webword_init', 'build_sdk']);
 
-        if (packageFile)
-            grunt.log.ok('WebPowerPoint config loaded successfully'.green);
-        else
-            grunt.log.error().writeln('Could not load config file'.red);
-    });
-	
-	grunt.registerTask('build_word',     ['build_webword_init', 'build_sdk']);
-	grunt.registerTask('build_cell',  ['build_webexcel_init', 'build_sdk']);
-	grunt.registerTask('build_slide', ['build_webpowerpoint_init', 'build_sdk']);
-
-	grunt.registerTask('build_all', ['build_word', 'build_cell', 'build_slide']);
-	
-	grunt.registerTask('concat_sdk_init', function() {
+	grunt.registerTask('concat_sdk_init', function () {
 		var sdkDstFolder = packageFile['compile']['sdk']['dst'];
 		var sdkTmp = sdkDstFolder + '/sdk-tmp.js';
 		var sdkAllTmp = sdkDstFolder + '/sdk-all-tmp.js';
@@ -87,42 +61,24 @@ module.exports = function(grunt) {
 		var srcFilesMin = packageFile['compile']['sdk']['min'];
 		var srcFilesAll = packageFile['compile']['sdk']['common'];
 		var sdkOpt = {};
-		
+
 		if (!grunt.option('noclosure')) {
 			sdkOpt = {
 				banner: '(function(window, undefined) {',
 				footer: '})(window);'
 			};
 		}
-		
-		if (grunt.option('mobile')) {
-			srcFilesMin = packageFile['compile']['sdk']['mobile_banners']['min'].concat(srcFilesMin);
-			srcFilesAll = packageFile['compile']['sdk']['mobile_banners']['common'].concat(srcFilesAll);
-			
-			var excludeFiles = packageFile['compile']['sdk']['exclude_mobile'];
-			srcFilesAll = srcFilesAll.filter(function(item) {
-				return -1 === excludeFiles.indexOf(item);
-			});
-			var mobileFiles = packageFile['compile']['sdk']['mobile'];
-			if(mobileFiles){
-				srcFilesAll = srcFilesAll.concat(mobileFiles);
-			}
-		}
-		
+
 		if (!grunt.option('noprivate')) {
 			srcFilesAll = srcFilesAll.concat(packageFile['compile']['sdk']['private']);
 		}
-		if (grunt.option('desktop')) {
-			srcFilesMin = srcFilesMin.concat(packageFile['compile']['sdk']['desktop']['min']);
-			srcFilesAll = srcFilesAll.concat(packageFile['compile']['sdk']['desktop']['common']);
-		}
-		
+
 		grunt.initConfig({
 			concat: {
 				sdkmin: {
 					options: {
-//						banner: '(function(window, undefined) {',
-//						footer: '})(window);window["split"]="split";'
+						//						banner: '(function(window, undefined) {',
+						//						footer: '})(window);window["split"]="split";'
 						banner: '',
 						footer: 'window["split"]="split";'
 					},
@@ -152,8 +108,8 @@ module.exports = function(grunt) {
 			}
 		});
 	});
-	
-	grunt.registerTask('compile_sdk_init', function() {
+
+	grunt.registerTask('compile_sdk_init', function () {
 		var splitLine = '';
 		var sdkDstFolder = packageFile['compile']['sdk']['dst'];
 		var sdkTmp = sdkDstFolder + '/sdk-tmp.js';
@@ -175,7 +131,7 @@ module.exports = function(grunt) {
 		} else {
 			splitLine = ('PRETTY_PRINT' === formatting) ? 'window["split"] = "split";' : 'window["split"]="split";';
 		}
-		
+
 		grunt.initConfig({
 			// 'closure-compiler': {
 			// 	sdk: {
@@ -187,8 +143,8 @@ module.exports = function(grunt) {
 			splitfile: {
 				sdk: {
 					options: {
-					  separator: splitLine,
-					  prefix: [ "sdk-all-min", "sdk-all" ]
+						separator: splitLine,
+						prefix: ["sdk-all-min", "sdk-all"]
 					},
 					dest: sdkDstFolder,
 					//src: tmp_sdk_path
@@ -212,7 +168,7 @@ module.exports = function(grunt) {
 					},
 					src: [
 						sdkTmp,
-						tmp_sdk_path,
+						// tmp_sdk_path,
 						sdkAllCache
 					]
 				}
@@ -236,9 +192,13 @@ module.exports = function(grunt) {
 			}
 		});
 	});
-	
-	grunt.registerTask('concat_sdk', ['concat_sdk_init', 'concat', 'clean']);
+
+	//grunt.registerTask('concat_sdk', ['concat_sdk_init', 'concat', 'clean']);
+	grunt.registerTask('concat_sdk', ['concat_sdk_init', 'concat']);
+
+	//orig
 	//grunt.registerTask('build_sdk', ['concat_sdk', 'compile_sdk_init', 'closure-compiler', 'splitfile', 'concat', 'replace', 'clean']);
-	grunt.registerTask('build_sdk', ['concat_sdk', 'compile_sdk_init','splitfile', 'concat', 'replace', 'clean']);
+
+	grunt.registerTask('build_sdk', ['concat_sdk', 'compile_sdk_init', 'splitfile', 'concat', 'replace', 'clean']);
 	grunt.registerTask('default', ['build_word']);
 };
